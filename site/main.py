@@ -105,4 +105,4 @@ def betyg_analys(file_path):
     return filepath, count3, count4, count5, average_grade, name
 
 if __name__ == "__main__":
-    app.run(Port = 80)
+    app.run(Port = 5000)
