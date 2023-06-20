@@ -1,0 +1,60 @@
+/* static/styles/style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background: #4f58bd;    
+    color: white;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #abe81d 3px solid;
+}
+
+header h1 {
+    padding: 5px 0;
+    text-align: center;
+}
+
+form {
+    margin: 20px auto;
+    width: 50%;
+    padding: 20px;
+    border: 1px solid #555;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+form input[type="file"] {
+    padding: 10px;
+}
+
+form input[type="submit"] {
+    float: right;
+    background: #50a8a0;
+    color: #fff;
+    padding: 10px 15px;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.results {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.results h1, .results p {
+    color: #333;
+}
