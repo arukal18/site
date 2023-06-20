@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>{{ name }}</h1>
+      </header>
+      <div class="results">
+        <!-- Create a div where the chart will be rendered -->
+        <div id="chart"></div>
+        <p>Grade 3: {{ data[0] }}</p>
+        <p>Grade 4: {{ data[1] }}</p>
+        <p>Grade 5: {{ data[2] }}</p>
+        <p>Total: {{ total }}</p>
+        <p>Average grade: {{ avg_grade }}</p>
+      </div>
+    </div>
+    <div class="leaderboard">
+      <h2>Leaderboard</h2>
+      <ol>
+        {% for entry in leaderboard %}
+          <li>{{ entry['name'] }} - Average Grade: {{ entry['average_grade'] }}</li>
+        {% endfor %}
+      </ol>
+    </div>
+
+
+    <script>
+      var data = JSON.parse('{{ data | tojson | safe }}'); // Parse the data from Flask
+      var labels = ['3', '4', '5'];
+
+      var width = 450,
+          height = 450,
+          margin = 40;
+
+      var radius = Math.min(width, height) / 2 - margin;
+
+      var svg = d3.select("#chart")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+      var color = d3.scaleOrdinal()
+        .domain(labels)
+        .range(["blue", "orange", "green"]);
+
+      var pie = d3.pie().sort(null); // Do not sort the data
+
+      // We transform the data into an object array. Each object represents a grade
+      var dataObj = data.map(function (count, i) {
+        return { grade: labels[i], count: count };
+      });
+
+      var data_ready = pie(dataObj.map(function (d) { return d.count; }))
+
+      var arcGenerator = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+      var arcs = svg.selectAll('mySlices')
+        .data(data_ready)
+        .enter()
+        .append('g')
+
+      arcs.append('path')
+        .attr('d', arcGenerator)
+        .attr('fill', function (d, i) { return color(i); })
+        .attr("stroke", "black")
+        .style("stroke-width", "2px")
+        .style("opacity", 0.7)
+        .on('mouseover', function () {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("opacity", 1);
+        })
+        .on('mouseout', function () {
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("opacity", 0.7);
+        })
+        .on('mouseover', function () {
+          d3.select(this)
+            .transition()
+            .duration(500)
+            .attr("d", d3.arc()
+              .innerRadius(0)
+              .outerRadius(radius + 10)
+            );
+        })
+        .on('mouseout', function () {
+          d3.select(this)
+            .transition()
+            .duration(500)
+            .attr("d", d3.arc()
+              .innerRadius(0)
+              .outerRadius(radius)
+            );
+        });
+
+      arcs.append('text')
+        .text(function (d, i) {
+          return dataObj[i].grade + ' (' + Math.round(100 * dataObj[i].count / d3.sum(dataObj, function (d) { return d.count; })) + '%)';
+        })
+        .attr("transform", function (d) {
+          return "translate(" + arcGenerator.centroid(d) + ")";
+        })
+        .style("text-anchor", "middle")
+        .style("font-size", 15);
+
+    </script>
+  </body>
+</html>
