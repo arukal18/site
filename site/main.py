@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 from werkzeug.utils import secure_filename  # Add this line
