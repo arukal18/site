@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Ladda upp ditt resultatintyg från Ladok</h1>
+      </header>
+      <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+      </form>
+    </div>
+    <script>
+    $(document).ready(function(){
+      $('input[type="file"]').change(function(){
+        $('form').submit();
+      });
+    });
+    </script>
+
+<div class="leaderboard">
+  <h2>Leaderboard</h2>
+  <ol>
+    {% for entry in leaderboard %}
+      <li>{{ entry.name }} - Average Grade: {{ entry.average_grade }}</li>
+    {% endfor %}
+  </ol>
+</div>
+  </body>
+</html>
